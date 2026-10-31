@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automatic Reverse Parking — SDV Simulation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Automatic Reverse Parking System</h1>
+    <p>Software Defined Vehicle · four virtual distance sensors · 100% in-browser</p>
+  </div>
+  <ol id="pipe" aria-label="Control pipeline">
+    <li>Sense</li><li>Analyze</li><li>Decide</li><li>Control</li><li>Park</li>
+  </ol>
+</header>
+
+<main class="app">
+  <section class="left">
+    <div class="stage">
+      <canvas id="sim" width="1150" height="400" aria-label="Top-down parking simulation"></canvas>
+      <div id="banner" role="status"></div>
+    </div>
+
+    <div class="bar">
+      <button id="btnStart" class="primary">START AUTOMATIC PARKING</button>
+      <button id="btnPause">PAUSE</button>
+      <button id="btnResume">RESUME</button>
+      <button id="btnEstop" class="danger">EMERGENCY STOP</button>
+      <button id="btnReset">RESET</button>
+    </div>
+
+    <div class="bar scen">
+      <div class="seg" role="group" aria-label="Parking slot size">
+        <span>Slot</span>
+        <button data-slot="small">520 cm · too small</button>
+        <button data-slot="tight">600 cm · tight</button>
+        <button data-slot="medium">650 cm · medium</button>
+        <button data-slot="large">760 cm · large</button>
+      </div>
+      <button id="btnObs">ADD OBSTACLE BEHIND CAR</button>
+      <button id="btnDemo">EMERGENCY DEMO</button>
+      <button id="btnManual">MANUAL DRIVE</button>
+    </div>
+
+    <div id="pad" hidden>
+      <p>Keys: ↑ / W drive · ↓ / S reverse · ← → / A D steer · Space brake</p>
+      <div><button data-k="ArrowLeft">◀</button><button data-k="ArrowUp">▲ Drive</button><button data-k="ArrowDown">▼ Reverse</button><button data-k="ArrowRight">▶</button></div>
+    </div>
+
+    <ul id="log" aria-live="polite"></ul>
+  </section>
+
+  <aside class="dash">
+    <div class="card">
+      <h2>Vehicle</h2>
+      <div class="veh">
+        <div class="wheel" aria-hidden="true"><i id="needle"></i></div>
+        <dl>
+          <dt>Speed</dt><dd id="vSpeed">0 km/h</dd>
+          <dt>Gear</dt><dd id="vGear">P</dd>
+          <dt>Steering</dt><dd><span id="vSteer">0°</span> <small id="vSteerTxt">Straight</small></dd>
+          <dt>State</dt><dd id="vState">IDLE</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Virtual sensors</h2>
+      <div class="sens">
+        <div><span>Front Left</span><b id="sFL"></b><u><i id="bFL"></i></u></div>
+        <div><span>Front Right</span><b id="sFR"></b><u><i id="bFR"></i></u></div>
+        <div><span>Rear Left</span><b id="sRL"></b><u><i id="bRL"></i></u></div>
+        <div><span>Rear Right</span><b id="sRR"></b><u><i id="bRR"></i></u></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Parking slot</h2>
+      <dl>
+        <dt>Slot length</dt><dd id="pLen">—</dd>
+        <dt>Required length</dt><dd id="pReq">550 cm</dd>
+        <dt>Safety margin</dt><dd id="pMargin">50 cm</dd>
+        <dt>Slot status</dt><dd id="pStatus">UNKNOWN</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h2>System</h2>
+      <dl>
+        <dt>System</dt><dd id="sysActive">ACTIVE</dd>
+        <dt>Autonomous mode</dt><dd id="sysAuto">OFF</dd>
+        <dt>Collision status</dt><dd id="sysCol">SAFE</dd>
+      </dl>
+    </div>
+
+    <div class="card result" id="result" hidden>
+      <h2>✓ Parking completed</h2>
+      <p>Vehicle is safely positioned.</p>
+      <dl>
+        <dt>Parking accuracy</dt><dd id="rAcc"></dd>
+        <dt>Alignment</dt><dd id="rAli"></dd>
+        <dt>Rear clearance</dt><dd id="rRear"></dd>
+        <dt>Front clearance</dt><dd id="rFront"></dd>
+        <dt>Curb clearance</dt><dd id="rCurb"></dd>
+      </dl>
+    </div>
+  </aside>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
